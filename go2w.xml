@@ -169,6 +169,7 @@
       </body>
       <body name="imu" pos="-0.02557 0 0.04232">
         <inertial pos="0 0 0" mass="1e-06" diaginertia="1e-09 1e-09 1e-09" />
+        <site name="imu" pos="0 0 0" size="0.01" rgba="1 0 0 1" />
       </body>
       <body name="radar" pos="0.28945 0 -0.046825" quat="0.1313 0 0.9913 0">
         <inertial pos="0 0 0" mass="1e-06" diaginertia="1e-09 1e-09 1e-09" />
@@ -217,6 +218,51 @@
     <motor name="RR_calf_joint" joint="RR_calf_joint" />
     <motor name="RR_foot_joint" joint="RR_foot_joint" />
   </actuator>
+
+  <sensor>
+    <!-- ===== IMU（挂在与 imu body 重合的 site 上） ===== -->
+    <framequat name="imu_quat" objtype="site" objname="imu" />
+    <gyro name="imu_gyro" site="imu" />
+    <accelerometer name="imu_acc" site="imu" />
+    <framepos name="imu_pos" objtype="site" objname="imu" />
+    <framelinvel name="imu_linvel" objtype="site" objname="imu" />
+    <frameangvel name="imu_angvel" objtype="site" objname="imu" />
+
+    <!-- ===== 关节位置 / 速度（顺序 FL -> FR -> RL -> RR） ===== -->
+    <jointpos name="FL_hip_joint_pos" joint="FL_hip_joint" />
+    <jointpos name="FL_thigh_joint_pos" joint="FL_thigh_joint" />
+    <jointpos name="FL_calf_joint_pos" joint="FL_calf_joint" />
+    <jointpos name="FL_foot_joint_pos" joint="FL_foot_joint" />
+    <jointpos name="FR_hip_joint_pos" joint="FR_hip_joint" />
+    <jointpos name="FR_thigh_joint_pos" joint="FR_thigh_joint" />
+    <jointpos name="FR_calf_joint_pos" joint="FR_calf_joint" />
+    <jointpos name="FR_foot_joint_pos" joint="FR_foot_joint" />
+    <jointpos name="RL_hip_joint_pos" joint="RL_hip_joint" />
+    <jointpos name="RL_thigh_joint_pos" joint="RL_thigh_joint" />
+    <jointpos name="RL_calf_joint_pos" joint="RL_calf_joint" />
+    <jointpos name="RL_foot_joint_pos" joint="RL_foot_joint" />
+    <jointpos name="RR_hip_joint_pos" joint="RR_hip_joint" />
+    <jointpos name="RR_thigh_joint_pos" joint="RR_thigh_joint" />
+    <jointpos name="RR_calf_joint_pos" joint="RR_calf_joint" />
+    <jointpos name="RR_foot_joint_pos" joint="RR_foot_joint" />
+
+    <jointvel name="FL_hip_joint_vel" joint="FL_hip_joint" />
+    <jointvel name="FL_thigh_joint_vel" joint="FL_thigh_joint" />
+    <jointvel name="FL_calf_joint_vel" joint="FL_calf_joint" />
+    <jointvel name="FL_foot_joint_vel" joint="FL_foot_joint" />
+    <jointvel name="FR_hip_joint_vel" joint="FR_hip_joint" />
+    <jointvel name="FR_thigh_joint_vel" joint="FR_thigh_joint" />
+    <jointvel name="FR_calf_joint_vel" joint="FR_calf_joint" />
+    <jointvel name="FR_foot_joint_vel" joint="FR_foot_joint" />
+    <jointvel name="RL_hip_joint_vel" joint="RL_hip_joint" />
+    <jointvel name="RL_thigh_joint_vel" joint="RL_thigh_joint" />
+    <jointvel name="RL_calf_joint_vel" joint="RL_calf_joint" />
+    <jointvel name="RL_foot_joint_vel" joint="RL_foot_joint" />
+    <jointvel name="RR_hip_joint_vel" joint="RR_hip_joint" />
+    <jointvel name="RR_thigh_joint_vel" joint="RR_thigh_joint" />
+    <jointvel name="RR_calf_joint_vel" joint="RR_calf_joint" />
+    <jointvel name="RR_foot_joint_vel" joint="RR_foot_joint" />
+  </sensor>
 
   <visual>
     <rgba haze="0.15 0.25 0.35 1" />
