@@ -1,0 +1,65 @@
+#=================================
+# Sim2Sim 项目忽略规则
+#=================================
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# 虚拟环境
+.venv/
+venv/
+env/
+ENV/
+
+# 测试 / 类型检查 / 缓存工具
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.coverage
+.coverage.*
+htmlcov/
+.ipynb_checkpoints/
+
+# ---------- 运行输出 ----------
+# 仿真日志、控制台输出、可视化截图/录像
+logs/
+*.log
+*.mp4
+*.avi
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig
+*.swp
+*~
+
+# ---------- ROS2 / colcon ----------
+# urdf2xml 是 ROS 描述包，colcon 构建产物不提交
+log/
+install/
+devel/
+.colcon/
+
+# ---------- 编辑器 / 系统 ----------
+.vscode/*
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- 敏感信息 ----------
+.env
+*.pem
