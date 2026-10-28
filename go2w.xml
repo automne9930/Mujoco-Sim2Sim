@@ -15,6 +15,8 @@
 
   <worldbody>
     <body name="base" childclass="robot" pos="0 0 0.5254">
+      <inertial pos="0.021112 0 -0.005366" mass="6.921"
+                fullinertia="0.02448 0.098077 0.107 0.00012166 0.0014849 -3.12e-05" />
       <geom name="base_collision" type="box" size="0.1881 0.04675 0.057" class="collision" />
       <geom name="base_visual" type="mesh" mesh="base_base" material="深色橡胶_001-effect" class="visual" />
       <body name="Head_upper" pos="0.285 0 0.01">
