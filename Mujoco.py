@@ -8,7 +8,7 @@ import mujoco
 import mujoco.viewer
 
 script_dir = Path(__file__).resolve().parent    # 意为当前Mujoco.py脚本所在的目录
-xml_path = script_dir / "go2w.xml"             # 意为在脚本目录下寻找xml文件
+xml_path = script_dir / "scene.xml"            # 加载场景（场景内 include 了机器人本体 go2w.xml）
 
 
 

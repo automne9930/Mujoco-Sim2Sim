@@ -1,4 +1,5 @@
 <mujoco model="go2w_description">
+  <!-- 机器人本体：仅包含结构、驱动、传感器；场景（地面/光照/天空盒）见 scene.xml -->
   <default>
     <default class="robot">
       <default class="visual">
@@ -8,16 +9,9 @@
         <geom contype="0" conaffinity="1" group="3" />
       </default>
     </default>
-    <default class="floor">
-      <geom type="plane" size="0 0 0.05" material="groundplane" />
-    </default>
   </default>
 
   <compiler angle="radian" meshdir="." balanceinertia="true" />
-
-  <visual>
-    <global offwidth="3840" offheight="2160" />
-  </visual>
 
   <worldbody>
     <body name="base" childclass="robot" pos="0 0 0.5254">
@@ -176,8 +170,6 @@
       </body>
       <freejoint name="floating_base" />
     </body>
-    <light pos="0 0 2." dir="0 0 -1" directional="true" />
-    <geom name="floor" class="floor" size="0 0 0.05" />
   </worldbody>
 
   <asset>
@@ -195,9 +187,6 @@
     <mesh name="FR_foot_collision_right_wheel.stl" file="meshes/go2w_description/dae/right_wheel.stl" />
     <mesh name="FL_foot_collision_left_wheel" file="meshes/go2w_description/dae/left_wheel.stl" />
     <mesh name="FR_foot_collision_right_wheel" file="meshes/go2w_description/dae/right_wheel.stl" />
-    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300" />
-    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2" />
-    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072" />
   </asset>
 
   <actuator>
@@ -263,8 +252,4 @@
     <jointvel name="RR_calf_joint_vel" joint="RR_calf_joint" />
     <jointvel name="RR_foot_joint_vel" joint="RR_foot_joint" />
   </sensor>
-
-  <visual>
-    <rgba haze="0.15 0.25 0.35 1" />
-  </visual>
 </mujoco>
