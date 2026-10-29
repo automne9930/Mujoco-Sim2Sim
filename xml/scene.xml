@@ -2,6 +2,11 @@
   <!-- 复杂测试场景：机器人本体见 go2w.xml -->
   <include file="go2w.xml" />
 
+  <!-- 全局默认摩擦（滑动 / 扭转 / 滚动）-->
+  <default>
+    <geom friction="1.5 0.005 0.0001" />
+  </default>
+
   <visual>
     <global offwidth="3840" offheight="2160" />
     <rgba haze="0.15 0.25 0.35 1" />

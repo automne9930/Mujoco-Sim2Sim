@@ -2,7 +2,7 @@
 # 顺序列表全部显式写出，代码不做任何名称猜测
 
 # xml文件与onnx文件存放路径（相对路径从项目的Sim2Sim根目录开始）
-scene_xml: scene.xml
+scene_xml: xml/scene.xml
 policy_onnx: /home/auto/Robomaster/Projects/IsaacLab/robot_lab/logs/rsl_rl/unitree_go2w_rough/2026-10-09_12-11-24/exported/policy.onnx
 
 # 仿真步长（s）与推理分频（推理步长就是sim_dt * decimation）

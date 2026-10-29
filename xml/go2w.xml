@@ -11,7 +11,7 @@
     </default>
   </default>
 
-  <compiler angle="radian" meshdir="." balanceinertia="true" />
+  <compiler angle="radian" meshdir="meshes" balanceinertia="true" />
 
   <worldbody>
     <body name="base" childclass="robot" pos="0 0 0.5254">
@@ -177,18 +177,18 @@
   <asset>
     <material name="深色橡胶_001-effect" rgba="0.6717055 0.6924257 0.7742702 1" />
     <material name="default_material" rgba="0.7 0.7 0.7 1" />
-    <mesh name="base_base" file="meshes/go2w_description/dae/base.obj" />
-    <mesh name="FL_hip_hip" file="meshes/go2w_description/dae/hip.obj" />
-    <mesh name="FL_thigh_thigh" file="meshes/go2w_description/dae/thigh.obj" />
-    <mesh name="FL_calf_calf" file="meshes/go2w_description/dae/calf.stl" />
-    <mesh name="FL_foot_left_wheel" file="meshes/go2w_description/dae/left_wheel.obj" />
-    <mesh name="FR_thigh_thigh_mirror" file="meshes/go2w_description/dae/thigh_mirror.obj" />
-    <mesh name="FR_calf_calf_mirror" file="meshes/go2w_description/dae/calf_mirror.stl" />
-    <mesh name="FR_foot_right_wheel" file="meshes/go2w_description/dae/right_wheel.obj" />
-    <mesh name="FL_foot_collision_left_wheel.stl" file="meshes/go2w_description/dae/left_wheel.stl" />
-    <mesh name="FR_foot_collision_right_wheel.stl" file="meshes/go2w_description/dae/right_wheel.stl" />
-    <mesh name="FL_foot_collision_left_wheel" file="meshes/go2w_description/dae/left_wheel.stl" />
-    <mesh name="FR_foot_collision_right_wheel" file="meshes/go2w_description/dae/right_wheel.stl" />
+    <mesh name="base_base" file="base.obj" />
+    <mesh name="FL_hip_hip" file="hip.obj" />
+    <mesh name="FL_thigh_thigh" file="thigh.obj" />
+    <mesh name="FL_calf_calf" file="calf.stl" />
+    <mesh name="FL_foot_left_wheel" file="left_wheel.obj" />
+    <mesh name="FR_thigh_thigh_mirror" file="thigh_mirror.obj" />
+    <mesh name="FR_calf_calf_mirror" file="calf_mirror.stl" />
+    <mesh name="FR_foot_right_wheel" file="right_wheel.obj" />
+    <mesh name="FL_foot_collision_left_wheel.stl" file="left_wheel.stl" />
+    <mesh name="FR_foot_collision_right_wheel.stl" file="right_wheel.stl" />
+    <mesh name="FL_foot_collision_left_wheel" file="left_wheel.stl" />
+    <mesh name="FR_foot_collision_right_wheel" file="right_wheel.stl" />
   </asset>
 
   <actuator>
