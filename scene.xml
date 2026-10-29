@@ -1,5 +1,5 @@
 <mujoco model="go2w scene">
-  <!-- 场景：地面、光照、天空盒。机器人本体见 go2w.xml -->
+  <!-- 复杂测试场景：机器人本体见 go2w.xml -->
   <include file="go2w.xml" />
 
   <visual>
@@ -11,10 +11,464 @@
     <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300" />
     <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2" />
     <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072" />
+    <texture type="2d" name="terrain_tex" builtin="checker" rgb1="0.35 0.45 0.55" rgb2="0.22 0.32 0.42" width="256" height="256" />
+    <material name="rough_low" texture="terrain_tex" texrepeat="6 6" rgba="0.42 0.58 0.48 1" />
+    <material name="rough_med" texture="terrain_tex" texrepeat="6 6" rgba="0.52 0.52 0.38 1" />
+    <material name="rough_high" texture="terrain_tex" texrepeat="6 6" rgba="0.60 0.42 0.36 1" />
+    <material name="stair_low" rgba="0.50 0.46 0.40 1" />
+    <material name="stair_med" rgba="0.55 0.45 0.35 1" />
+    <material name="stair_steep" rgba="0.60 0.42 0.30 1" />
+    <material name="stair_extreme" rgba="0.65 0.38 0.28 1" />
   </asset>
 
   <worldbody>
-    <light pos="0 0 2." dir="0 0 -1" directional="true" />
-    <geom name="floor" type="plane" size="0 0 0.05" material="groundplane" />
+    <light pos="0 0 4.5" dir="0 0 -1" directional="true" />
+    <light pos="6 6 4.0" dir="-0.5 -0.5 -1" directional="true" diffuse="0.35 0.35 0.35" />
+    <!-- 地面与中心出生安全区：原点 (0,0) 四周 x∈[-2.8,2.8], y∈[-3.25,3.25] 为平坦出发区 -->
+    <geom name="floor" type="plane" size="20 20 0.05" material="groundplane" />
+
+    <!-- ==================== 东侧 (+X)：4组不同【高度-踏面】并排等参楼梯 ==================== -->
+    <!-- 东侧楼梯A (y=-2.325): 缓坡宽踏面 | 恒定阶高 4cm, 踏面 36cm, 6级上下, 顶平台 72cm -->
+    <geom name="stair_east_A_up_0" type="box" size="0.180 0.700 0.0200" pos="2.980 -2.325 0.0200" material="stair_low" />
+    <geom name="stair_east_A_up_1" type="box" size="0.180 0.700 0.0400" pos="3.340 -2.325 0.0400" material="stair_low" />
+    <geom name="stair_east_A_up_2" type="box" size="0.180 0.700 0.0600" pos="3.700 -2.325 0.0600" material="stair_low" />
+    <geom name="stair_east_A_up_3" type="box" size="0.180 0.700 0.0800" pos="4.060 -2.325 0.0800" material="stair_low" />
+    <geom name="stair_east_A_up_4" type="box" size="0.180 0.700 0.1000" pos="4.420 -2.325 0.1000" material="stair_low" />
+    <geom name="stair_east_A_up_5" type="box" size="0.180 0.700 0.1200" pos="4.780 -2.325 0.1200" material="stair_low" />
+    <geom name="stair_east_A_landing" type="box" size="0.360 0.700 0.1200" pos="5.320 -2.325 0.1200" material="stair_low" />
+    <geom name="stair_east_A_dn_0" type="box" size="0.180 0.700 0.1000" pos="5.860 -2.325 0.1000" material="stair_low" />
+    <geom name="stair_east_A_dn_1" type="box" size="0.180 0.700 0.0800" pos="6.220 -2.325 0.0800" material="stair_low" />
+    <geom name="stair_east_A_dn_2" type="box" size="0.180 0.700 0.0600" pos="6.580 -2.325 0.0600" material="stair_low" />
+    <geom name="stair_east_A_dn_3" type="box" size="0.180 0.700 0.0400" pos="6.940 -2.325 0.0400" material="stair_low" />
+    <geom name="stair_east_A_dn_4" type="box" size="0.180 0.700 0.0200" pos="7.300 -2.325 0.0200" material="stair_low" />
+
+    <!-- 东侧楼梯B (y=-0.775): 标准常规楼梯 | 恒定阶高 7cm, 踏面 32cm, 6级上下, 顶平台 64cm -->
+    <geom name="stair_east_B_up_0" type="box" size="0.160 0.700 0.0350" pos="2.960 -0.775 0.0350" material="stair_med" />
+    <geom name="stair_east_B_up_1" type="box" size="0.160 0.700 0.0700" pos="3.280 -0.775 0.0700" material="stair_med" />
+    <geom name="stair_east_B_up_2" type="box" size="0.160 0.700 0.1050" pos="3.600 -0.775 0.1050" material="stair_med" />
+    <geom name="stair_east_B_up_3" type="box" size="0.160 0.700 0.1400" pos="3.920 -0.775 0.1400" material="stair_med" />
+    <geom name="stair_east_B_up_4" type="box" size="0.160 0.700 0.1750" pos="4.240 -0.775 0.1750" material="stair_med" />
+    <geom name="stair_east_B_up_5" type="box" size="0.160 0.700 0.2100" pos="4.560 -0.775 0.2100" material="stair_med" />
+    <geom name="stair_east_B_landing" type="box" size="0.320 0.700 0.2100" pos="5.040 -0.775 0.2100" material="stair_med" />
+    <geom name="stair_east_B_dn_0" type="box" size="0.160 0.700 0.1750" pos="5.520 -0.775 0.1750" material="stair_med" />
+    <geom name="stair_east_B_dn_1" type="box" size="0.160 0.700 0.1400" pos="5.840 -0.775 0.1400" material="stair_med" />
+    <geom name="stair_east_B_dn_2" type="box" size="0.160 0.700 0.1050" pos="6.160 -0.775 0.1050" material="stair_med" />
+    <geom name="stair_east_B_dn_3" type="box" size="0.160 0.700 0.0700" pos="6.480 -0.775 0.0700" material="stair_med" />
+    <geom name="stair_east_B_dn_4" type="box" size="0.160 0.700 0.0350" pos="6.800 -0.775 0.0350" material="stair_med" />
+
+    <!-- 东侧楼梯C (y=+0.775): 中高紧凑楼梯 | 恒定阶高 10cm, 踏面 28cm, 6级上下, 顶平台 60cm -->
+    <geom name="stair_east_C_up_0" type="box" size="0.140 0.700 0.0500" pos="2.940 0.775 0.0500" material="stair_steep" />
+    <geom name="stair_east_C_up_1" type="box" size="0.140 0.700 0.1000" pos="3.220 0.775 0.1000" material="stair_steep" />
+    <geom name="stair_east_C_up_2" type="box" size="0.140 0.700 0.1500" pos="3.500 0.775 0.1500" material="stair_steep" />
+    <geom name="stair_east_C_up_3" type="box" size="0.140 0.700 0.2000" pos="3.780 0.775 0.2000" material="stair_steep" />
+    <geom name="stair_east_C_up_4" type="box" size="0.140 0.700 0.2500" pos="4.060 0.775 0.2500" material="stair_steep" />
+    <geom name="stair_east_C_up_5" type="box" size="0.140 0.700 0.3000" pos="4.340 0.775 0.3000" material="stair_steep" />
+    <geom name="stair_east_C_landing" type="box" size="0.300 0.700 0.3000" pos="4.780 0.775 0.3000" material="stair_steep" />
+    <geom name="stair_east_C_dn_0" type="box" size="0.140 0.700 0.2500" pos="5.220 0.775 0.2500" material="stair_steep" />
+    <geom name="stair_east_C_dn_1" type="box" size="0.140 0.700 0.2000" pos="5.500 0.775 0.2000" material="stair_steep" />
+    <geom name="stair_east_C_dn_2" type="box" size="0.140 0.700 0.1500" pos="5.780 0.775 0.1500" material="stair_steep" />
+    <geom name="stair_east_C_dn_3" type="box" size="0.140 0.700 0.1000" pos="6.060 0.775 0.1000" material="stair_steep" />
+    <geom name="stair_east_C_dn_4" type="box" size="0.140 0.700 0.0500" pos="6.340 0.775 0.0500" material="stair_steep" />
+
+    <!-- 东侧楼梯D (y=+2.325): 陡峭窄踏面楼梯 | 恒定阶高 13cm, 踏面 24cm, 6级上下, 顶平台 60cm -->
+    <geom name="stair_east_D_up_0" type="box" size="0.120 0.700 0.0650" pos="2.920 2.325 0.0650" material="stair_extreme" />
+    <geom name="stair_east_D_up_1" type="box" size="0.120 0.700 0.1300" pos="3.160 2.325 0.1300" material="stair_extreme" />
+    <geom name="stair_east_D_up_2" type="box" size="0.120 0.700 0.1950" pos="3.400 2.325 0.1950" material="stair_extreme" />
+    <geom name="stair_east_D_up_3" type="box" size="0.120 0.700 0.2600" pos="3.640 2.325 0.2600" material="stair_extreme" />
+    <geom name="stair_east_D_up_4" type="box" size="0.120 0.700 0.3250" pos="3.880 2.325 0.3250" material="stair_extreme" />
+    <geom name="stair_east_D_up_5" type="box" size="0.120 0.700 0.3900" pos="4.120 2.325 0.3900" material="stair_extreme" />
+    <geom name="stair_east_D_landing" type="box" size="0.300 0.700 0.3900" pos="4.540 2.325 0.3900" material="stair_extreme" />
+    <geom name="stair_east_D_dn_0" type="box" size="0.120 0.700 0.3250" pos="4.960 2.325 0.3250" material="stair_extreme" />
+    <geom name="stair_east_D_dn_1" type="box" size="0.120 0.700 0.2600" pos="5.200 2.325 0.2600" material="stair_extreme" />
+    <geom name="stair_east_D_dn_2" type="box" size="0.120 0.700 0.1950" pos="5.440 2.325 0.1950" material="stair_extreme" />
+    <geom name="stair_east_D_dn_3" type="box" size="0.120 0.700 0.1300" pos="5.680 2.325 0.1300" material="stair_extreme" />
+    <geom name="stair_east_D_dn_4" type="box" size="0.120 0.700 0.0650" pos="5.920 2.325 0.0650" material="stair_extreme" />
+
+    <!-- ==================== 北侧 (+Y)：3组特殊【高度-踏面】并排等参楼梯 ==================== -->
+    <!-- 北侧楼梯A (x=-1.80): 超宽踏面低阶梯 | 恒定阶高 5cm, 踏面 40cm, 5级上下, 顶平台 80cm -->
+    <geom name="stair_north_A_up_0" type="box" size="0.825 0.200 0.0250" pos="-1.800 3.450 0.0250" material="stair_low" />
+    <geom name="stair_north_A_up_1" type="box" size="0.825 0.200 0.0500" pos="-1.800 3.850 0.0500" material="stair_low" />
+    <geom name="stair_north_A_up_2" type="box" size="0.825 0.200 0.0750" pos="-1.800 4.250 0.0750" material="stair_low" />
+    <geom name="stair_north_A_up_3" type="box" size="0.825 0.200 0.1000" pos="-1.800 4.650 0.1000" material="stair_low" />
+    <geom name="stair_north_A_up_4" type="box" size="0.825 0.200 0.1250" pos="-1.800 5.050 0.1250" material="stair_low" />
+    <geom name="stair_north_A_landing" type="box" size="0.825 0.400 0.1250" pos="-1.800 5.650 0.1250" material="stair_low" />
+    <geom name="stair_north_A_dn_0" type="box" size="0.825 0.200 0.1000" pos="-1.800 6.250 0.1000" material="stair_low" />
+    <geom name="stair_north_A_dn_1" type="box" size="0.825 0.200 0.0750" pos="-1.800 6.650 0.0750" material="stair_low" />
+    <geom name="stair_north_A_dn_2" type="box" size="0.825 0.200 0.0500" pos="-1.800 7.050 0.0500" material="stair_low" />
+    <geom name="stair_north_A_dn_3" type="box" size="0.825 0.200 0.0250" pos="-1.800 7.450 0.0250" material="stair_low" />
+
+    <!-- 北侧楼梯B (x=0.00): 标准工业楼梯 | 恒定阶高 9cm, 踏面 30cm, 6级上下, 顶平台 60cm -->
+    <geom name="stair_north_B_up_0" type="box" size="0.825 0.150 0.0450" pos="0.000 3.400 0.0450" material="stair_med" />
+    <geom name="stair_north_B_up_1" type="box" size="0.825 0.150 0.0900" pos="0.000 3.700 0.0900" material="stair_med" />
+    <geom name="stair_north_B_up_2" type="box" size="0.825 0.150 0.1350" pos="0.000 4.000 0.1350" material="stair_med" />
+    <geom name="stair_north_B_up_3" type="box" size="0.825 0.150 0.1800" pos="0.000 4.300 0.1800" material="stair_med" />
+    <geom name="stair_north_B_up_4" type="box" size="0.825 0.150 0.2250" pos="0.000 4.600 0.2250" material="stair_med" />
+    <geom name="stair_north_B_up_5" type="box" size="0.825 0.150 0.2700" pos="0.000 4.900 0.2700" material="stair_med" />
+    <geom name="stair_north_B_landing" type="box" size="0.825 0.300 0.2700" pos="0.000 5.350 0.2700" material="stair_med" />
+    <geom name="stair_north_B_dn_0" type="box" size="0.825 0.150 0.2250" pos="0.000 5.800 0.2250" material="stair_med" />
+    <geom name="stair_north_B_dn_1" type="box" size="0.825 0.150 0.1800" pos="0.000 6.100 0.1800" material="stair_med" />
+    <geom name="stair_north_B_dn_2" type="box" size="0.825 0.150 0.1350" pos="0.000 6.400 0.1350" material="stair_med" />
+    <geom name="stair_north_B_dn_3" type="box" size="0.825 0.150 0.0900" pos="0.000 6.700 0.0900" material="stair_med" />
+    <geom name="stair_north_B_dn_4" type="box" size="0.825 0.150 0.0450" pos="0.000 7.000 0.0450" material="stair_med" />
+
+    <!-- 北侧楼梯C (x=+1.80): 极限高阶挑战梯 | 恒定阶高 15cm, 踏面 30cm, 5级上下, 顶平台 60cm -->
+    <geom name="stair_north_C_up_0" type="box" size="0.825 0.150 0.0750" pos="1.800 3.400 0.0750" material="stair_extreme" />
+    <geom name="stair_north_C_up_1" type="box" size="0.825 0.150 0.1500" pos="1.800 3.700 0.1500" material="stair_extreme" />
+    <geom name="stair_north_C_up_2" type="box" size="0.825 0.150 0.2250" pos="1.800 4.000 0.2250" material="stair_extreme" />
+    <geom name="stair_north_C_up_3" type="box" size="0.825 0.150 0.3000" pos="1.800 4.300 0.3000" material="stair_extreme" />
+    <geom name="stair_north_C_up_4" type="box" size="0.825 0.150 0.3750" pos="1.800 4.600 0.3750" material="stair_extreme" />
+    <geom name="stair_north_C_landing" type="box" size="0.825 0.300 0.3750" pos="1.800 5.050 0.3750" material="stair_extreme" />
+    <geom name="stair_north_C_dn_0" type="box" size="0.825 0.150 0.3000" pos="1.800 5.500 0.3000" material="stair_extreme" />
+    <geom name="stair_north_C_dn_1" type="box" size="0.825 0.150 0.2250" pos="1.800 5.800 0.2250" material="stair_extreme" />
+    <geom name="stair_north_C_dn_2" type="box" size="0.825 0.150 0.1500" pos="1.800 6.100 0.1500" material="stair_extreme" />
+    <geom name="stair_north_C_dn_3" type="box" size="0.825 0.150 0.0750" pos="1.800 6.400 0.0750" material="stair_extreme" />
+
+    <!-- ==================== 西侧 (-X)：3组不同幅度 Random Grid Terrain (0.4m×0.4m 标准网格) ==================== -->
+    <!-- 西侧随机网格A-低幅度 (y∈[-3.05, -1.05]): 单元 0.4m×0.4m (9×5), 高度范围 1.0~3.0 cm -->
+    <geom name="grid_west_low_0_0" type="box" size="0.200 0.200 0.0114" pos="-6.200 -2.850 0.0114" material="rough_low" />
+    <geom name="grid_west_low_0_1" type="box" size="0.200 0.200 0.0053" pos="-6.200 -2.450 0.0053" material="rough_low" />
+    <geom name="grid_west_low_0_2" type="box" size="0.200 0.200 0.0078" pos="-6.200 -2.050 0.0078" material="rough_low" />
+    <geom name="grid_west_low_0_3" type="box" size="0.200 0.200 0.0072" pos="-6.200 -1.650 0.0072" material="rough_low" />
+    <geom name="grid_west_low_0_4" type="box" size="0.200 0.200 0.0124" pos="-6.200 -1.250 0.0124" material="rough_low" />
+    <geom name="grid_west_low_1_0" type="box" size="0.200 0.200 0.0118" pos="-5.800 -2.850 0.0118" material="rough_low" />
+    <geom name="grid_west_low_1_1" type="box" size="0.200 0.200 0.0139" pos="-5.800 -2.450 0.0139" material="rough_low" />
+    <geom name="grid_west_low_1_2" type="box" size="0.200 0.200 0.0059" pos="-5.800 -2.050 0.0059" material="rough_low" />
+    <geom name="grid_west_low_1_3" type="box" size="0.200 0.200 0.0092" pos="-5.800 -1.650 0.0092" material="rough_low" />
+    <geom name="grid_west_low_1_4" type="box" size="0.200 0.200 0.0053" pos="-5.800 -1.250 0.0053" material="rough_low" />
+    <geom name="grid_west_low_2_0" type="box" size="0.200 0.200 0.0072" pos="-5.400 -2.850 0.0072" material="rough_low" />
+    <geom name="grid_west_low_2_1" type="box" size="0.200 0.200 0.0101" pos="-5.400 -2.450 0.0101" material="rough_low" />
+    <geom name="grid_west_low_2_2" type="box" size="0.200 0.200 0.0053" pos="-5.400 -2.050 0.0053" material="rough_low" />
+    <geom name="grid_west_low_2_3" type="box" size="0.200 0.200 0.0070" pos="-5.400 -1.650 0.0070" material="rough_low" />
+    <geom name="grid_west_low_2_4" type="box" size="0.200 0.200 0.0115" pos="-5.400 -1.250 0.0115" material="rough_low" />
+    <geom name="grid_west_low_3_0" type="box" size="0.200 0.200 0.0104" pos="-5.000 -2.850 0.0104" material="rough_low" />
+    <geom name="grid_west_low_3_1" type="box" size="0.200 0.200 0.0072" pos="-5.000 -2.450 0.0072" material="rough_low" />
+    <geom name="grid_west_low_3_2" type="box" size="0.200 0.200 0.0109" pos="-5.000 -2.050 0.0109" material="rough_low" />
+    <geom name="grid_west_low_3_3" type="box" size="0.200 0.200 0.0131" pos="-5.000 -1.650 0.0131" material="rough_low" />
+    <geom name="grid_west_low_3_4" type="box" size="0.200 0.200 0.0051" pos="-5.000 -1.250 0.0051" material="rough_low" />
+    <geom name="grid_west_low_4_0" type="box" size="0.200 0.200 0.0131" pos="-4.600 -2.850 0.0131" material="rough_low" />
+    <geom name="grid_west_low_4_1" type="box" size="0.200 0.200 0.0120" pos="-4.600 -2.450 0.0120" material="rough_low" />
+    <geom name="grid_west_low_4_2" type="box" size="0.200 0.200 0.0084" pos="-4.600 -2.050 0.0084" material="rough_low" />
+    <geom name="grid_west_low_4_3" type="box" size="0.200 0.200 0.0066" pos="-4.600 -1.650 0.0066" material="rough_low" />
+    <geom name="grid_west_low_4_4" type="box" size="0.200 0.200 0.0146" pos="-4.600 -1.250 0.0146" material="rough_low" />
+    <geom name="grid_west_low_5_0" type="box" size="0.200 0.200 0.0084" pos="-4.200 -2.850 0.0084" material="rough_low" />
+    <geom name="grid_west_low_5_1" type="box" size="0.200 0.200 0.0059" pos="-4.200 -2.450 0.0059" material="rough_low" />
+    <geom name="grid_west_low_5_2" type="box" size="0.200 0.200 0.0060" pos="-4.200 -2.050 0.0060" material="rough_low" />
+    <geom name="grid_west_low_5_3" type="box" size="0.200 0.200 0.0135" pos="-4.200 -1.650 0.0135" material="rough_low" />
+    <geom name="grid_west_low_5_4" type="box" size="0.200 0.200 0.0110" pos="-4.200 -1.250 0.0110" material="rough_low" />
+    <geom name="grid_west_low_6_0" type="box" size="0.200 0.200 0.0131" pos="-3.800 -2.850 0.0131" material="rough_low" />
+    <geom name="grid_west_low_6_1" type="box" size="0.200 0.200 0.0123" pos="-3.800 -2.450 0.0123" material="rough_low" />
+    <geom name="grid_west_low_6_2" type="box" size="0.200 0.200 0.0104" pos="-3.800 -2.050 0.0104" material="rough_low" />
+    <geom name="grid_west_low_6_3" type="box" size="0.200 0.200 0.0147" pos="-3.800 -1.650 0.0147" material="rough_low" />
+    <geom name="grid_west_low_6_4" type="box" size="0.200 0.200 0.0088" pos="-3.800 -1.250 0.0088" material="rough_low" />
+    <geom name="grid_west_low_7_0" type="box" size="0.200 0.200 0.0105" pos="-3.400 -2.850 0.0105" material="rough_low" />
+    <geom name="grid_west_low_7_1" type="box" size="0.200 0.200 0.0133" pos="-3.400 -2.450 0.0133" material="rough_low" />
+    <geom name="grid_west_low_7_2" type="box" size="0.200 0.200 0.0112" pos="-3.400 -2.050 0.0112" material="rough_low" />
+    <geom name="grid_west_low_7_3" type="box" size="0.200 0.200 0.0136" pos="-3.400 -1.650 0.0136" material="rough_low" />
+    <geom name="grid_west_low_7_4" type="box" size="0.200 0.200 0.0108" pos="-3.400 -1.250 0.0108" material="rough_low" />
+    <geom name="grid_west_low_8_0" type="box" size="0.200 0.200 0.0120" pos="-3.000 -2.850 0.0120" material="rough_low" />
+    <geom name="grid_west_low_8_1" type="box" size="0.200 0.200 0.0055" pos="-3.000 -2.450 0.0055" material="rough_low" />
+    <geom name="grid_west_low_8_2" type="box" size="0.200 0.200 0.0073" pos="-3.000 -2.050 0.0073" material="rough_low" />
+    <geom name="grid_west_low_8_3" type="box" size="0.200 0.200 0.0079" pos="-3.000 -1.650 0.0079" material="rough_low" />
+    <geom name="grid_west_low_8_4" type="box" size="0.200 0.200 0.0058" pos="-3.000 -1.250 0.0058" material="rough_low" />
+
+    <!-- 西侧随机网格B-中幅度 (y∈[-1.00, +1.00]): 单元 0.4m×0.4m (9×5), 高度范围 2.5~6.5 cm -->
+    <geom name="grid_west_med_0_0" type="box" size="0.200 0.200 0.0172" pos="-6.200 -0.800 0.0172" material="rough_med" />
+    <geom name="grid_west_med_0_1" type="box" size="0.200 0.200 0.0145" pos="-6.200 -0.400 0.0145" material="rough_med" />
+    <geom name="grid_west_med_0_2" type="box" size="0.200 0.200 0.0181" pos="-6.200 0.000 0.0181" material="rough_med" />
+    <geom name="grid_west_med_0_3" type="box" size="0.200 0.200 0.0252" pos="-6.200 0.400 0.0252" material="rough_med" />
+    <geom name="grid_west_med_0_4" type="box" size="0.200 0.200 0.0198" pos="-6.200 0.800 0.0198" material="rough_med" />
+    <geom name="grid_west_med_1_0" type="box" size="0.200 0.200 0.0199" pos="-5.800 -0.800 0.0199" material="rough_med" />
+    <geom name="grid_west_med_1_1" type="box" size="0.200 0.200 0.0167" pos="-5.800 -0.400 0.0167" material="rough_med" />
+    <geom name="grid_west_med_1_2" type="box" size="0.200 0.200 0.0178" pos="-5.800 0.000 0.0178" material="rough_med" />
+    <geom name="grid_west_med_1_3" type="box" size="0.200 0.200 0.0312" pos="-5.800 0.400 0.0312" material="rough_med" />
+    <geom name="grid_west_med_1_4" type="box" size="0.200 0.200 0.0255" pos="-5.800 0.800 0.0255" material="rough_med" />
+    <geom name="grid_west_med_2_0" type="box" size="0.200 0.200 0.0247" pos="-5.400 -0.800 0.0247" material="rough_med" />
+    <geom name="grid_west_med_2_1" type="box" size="0.200 0.200 0.0159" pos="-5.400 -0.400 0.0159" material="rough_med" />
+    <geom name="grid_west_med_2_2" type="box" size="0.200 0.200 0.0271" pos="-5.400 0.000 0.0271" material="rough_med" />
+    <geom name="grid_west_med_2_3" type="box" size="0.200 0.200 0.0158" pos="-5.400 0.400 0.0158" material="rough_med" />
+    <geom name="grid_west_med_2_4" type="box" size="0.200 0.200 0.0201" pos="-5.400 0.800 0.0201" material="rough_med" />
+    <geom name="grid_west_med_3_0" type="box" size="0.200 0.200 0.0323" pos="-5.000 -0.800 0.0323" material="rough_med" />
+    <geom name="grid_west_med_3_1" type="box" size="0.200 0.200 0.0253" pos="-5.000 -0.400 0.0253" material="rough_med" />
+    <geom name="grid_west_med_3_2" type="box" size="0.200 0.200 0.0236" pos="-5.000 0.000 0.0236" material="rough_med" />
+    <geom name="grid_west_med_3_3" type="box" size="0.200 0.200 0.0262" pos="-5.000 0.400 0.0262" material="rough_med" />
+    <geom name="grid_west_med_3_4" type="box" size="0.200 0.200 0.0294" pos="-5.000 0.800 0.0294" material="rough_med" />
+    <geom name="grid_west_med_4_0" type="box" size="0.200 0.200 0.0280" pos="-4.600 -0.800 0.0280" material="rough_med" />
+    <geom name="grid_west_med_4_1" type="box" size="0.200 0.200 0.0171" pos="-4.600 -0.400 0.0171" material="rough_med" />
+    <geom name="grid_west_med_4_2" type="box" size="0.200 0.200 0.0131" pos="-4.600 0.000 0.0131" material="rough_med" />
+    <geom name="grid_west_med_4_3" type="box" size="0.200 0.200 0.0188" pos="-4.600 0.400 0.0188" material="rough_med" />
+    <geom name="grid_west_med_4_4" type="box" size="0.200 0.200 0.0179" pos="-4.600 0.800 0.0179" material="rough_med" />
+    <geom name="grid_west_med_5_0" type="box" size="0.200 0.200 0.0167" pos="-4.200 -0.800 0.0167" material="rough_med" />
+    <geom name="grid_west_med_5_1" type="box" size="0.200 0.200 0.0314" pos="-4.200 -0.400 0.0314" material="rough_med" />
+    <geom name="grid_west_med_5_2" type="box" size="0.200 0.200 0.0300" pos="-4.200 0.000 0.0300" material="rough_med" />
+    <geom name="grid_west_med_5_3" type="box" size="0.200 0.200 0.0188" pos="-4.200 0.400 0.0188" material="rough_med" />
+    <geom name="grid_west_med_5_4" type="box" size="0.200 0.200 0.0256" pos="-4.200 0.800 0.0256" material="rough_med" />
+    <geom name="grid_west_med_6_0" type="box" size="0.200 0.200 0.0204" pos="-3.800 -0.800 0.0204" material="rough_med" />
+    <geom name="grid_west_med_6_1" type="box" size="0.200 0.200 0.0308" pos="-3.800 -0.400 0.0308" material="rough_med" />
+    <geom name="grid_west_med_6_2" type="box" size="0.200 0.200 0.0217" pos="-3.800 0.000 0.0217" material="rough_med" />
+    <geom name="grid_west_med_6_3" type="box" size="0.200 0.200 0.0178" pos="-3.800 0.400 0.0178" material="rough_med" />
+    <geom name="grid_west_med_6_4" type="box" size="0.200 0.200 0.0174" pos="-3.800 0.800 0.0174" material="rough_med" />
+    <geom name="grid_west_med_7_0" type="box" size="0.200 0.200 0.0237" pos="-3.400 -0.800 0.0237" material="rough_med" />
+    <geom name="grid_west_med_7_1" type="box" size="0.200 0.200 0.0178" pos="-3.400 -0.400 0.0178" material="rough_med" />
+    <geom name="grid_west_med_7_2" type="box" size="0.200 0.200 0.0242" pos="-3.400 0.000 0.0242" material="rough_med" />
+    <geom name="grid_west_med_7_3" type="box" size="0.200 0.200 0.0305" pos="-3.400 0.400 0.0305" material="rough_med" />
+    <geom name="grid_west_med_7_4" type="box" size="0.200 0.200 0.0205" pos="-3.400 0.800 0.0205" material="rough_med" />
+    <geom name="grid_west_med_8_0" type="box" size="0.200 0.200 0.0169" pos="-3.000 -0.800 0.0169" material="rough_med" />
+    <geom name="grid_west_med_8_1" type="box" size="0.200 0.200 0.0325" pos="-3.000 -0.400 0.0325" material="rough_med" />
+    <geom name="grid_west_med_8_2" type="box" size="0.200 0.200 0.0227" pos="-3.000 0.000 0.0227" material="rough_med" />
+    <geom name="grid_west_med_8_3" type="box" size="0.200 0.200 0.0143" pos="-3.000 0.400 0.0143" material="rough_med" />
+    <geom name="grid_west_med_8_4" type="box" size="0.200 0.200 0.0134" pos="-3.000 0.800 0.0134" material="rough_med" />
+
+    <!-- 西侧随机网格C-高幅度 (y∈[+1.05, +3.05]): 单元 0.4m×0.4m (9×5), 高度范围 5.0~11.0 cm -->
+    <geom name="grid_west_high_0_0" type="box" size="0.200 0.200 0.0283" pos="-6.200 1.250 0.0283" material="rough_high" />
+    <geom name="grid_west_high_0_1" type="box" size="0.200 0.200 0.0438" pos="-6.200 1.650 0.0438" material="rough_high" />
+    <geom name="grid_west_high_0_2" type="box" size="0.200 0.200 0.0488" pos="-6.200 2.050 0.0488" material="rough_high" />
+    <geom name="grid_west_high_0_3" type="box" size="0.200 0.200 0.0377" pos="-6.200 2.450 0.0377" material="rough_high" />
+    <geom name="grid_west_high_0_4" type="box" size="0.200 0.200 0.0269" pos="-6.200 2.850 0.0269" material="rough_high" />
+    <geom name="grid_west_high_1_0" type="box" size="0.200 0.200 0.0364" pos="-5.800 1.250 0.0364" material="rough_high" />
+    <geom name="grid_west_high_1_1" type="box" size="0.200 0.200 0.0549" pos="-5.800 1.650 0.0549" material="rough_high" />
+    <geom name="grid_west_high_1_2" type="box" size="0.200 0.200 0.0409" pos="-5.800 2.050 0.0409" material="rough_high" />
+    <geom name="grid_west_high_1_3" type="box" size="0.200 0.200 0.0541" pos="-5.800 2.450 0.0541" material="rough_high" />
+    <geom name="grid_west_high_1_4" type="box" size="0.200 0.200 0.0508" pos="-5.800 2.850 0.0508" material="rough_high" />
+    <geom name="grid_west_high_2_0" type="box" size="0.200 0.200 0.0253" pos="-5.400 1.250 0.0253" material="rough_high" />
+    <geom name="grid_west_high_2_1" type="box" size="0.200 0.200 0.0466" pos="-5.400 1.650 0.0466" material="rough_high" />
+    <geom name="grid_west_high_2_2" type="box" size="0.200 0.200 0.0455" pos="-5.400 2.050 0.0455" material="rough_high" />
+    <geom name="grid_west_high_2_3" type="box" size="0.200 0.200 0.0411" pos="-5.400 2.450 0.0411" material="rough_high" />
+    <geom name="grid_west_high_2_4" type="box" size="0.200 0.200 0.0330" pos="-5.400 2.850 0.0330" material="rough_high" />
+    <geom name="grid_west_high_3_0" type="box" size="0.200 0.200 0.0442" pos="-5.000 1.250 0.0442" material="rough_high" />
+    <geom name="grid_west_high_3_1" type="box" size="0.200 0.200 0.0283" pos="-5.000 1.650 0.0283" material="rough_high" />
+    <geom name="grid_west_high_3_2" type="box" size="0.200 0.200 0.0380" pos="-5.000 2.050 0.0380" material="rough_high" />
+    <geom name="grid_west_high_3_3" type="box" size="0.200 0.200 0.0386" pos="-5.000 2.450 0.0386" material="rough_high" />
+    <geom name="grid_west_high_3_4" type="box" size="0.200 0.200 0.0536" pos="-5.000 2.850 0.0536" material="rough_high" />
+    <geom name="grid_west_high_4_0" type="box" size="0.200 0.200 0.0513" pos="-4.600 1.250 0.0513" material="rough_high" />
+    <geom name="grid_west_high_4_1" type="box" size="0.200 0.200 0.0329" pos="-4.600 1.650 0.0329" material="rough_high" />
+    <geom name="grid_west_high_4_2" type="box" size="0.200 0.200 0.0400" pos="-4.600 2.050 0.0400" material="rough_high" />
+    <geom name="grid_west_high_4_3" type="box" size="0.200 0.200 0.0304" pos="-4.600 2.450 0.0304" material="rough_high" />
+    <geom name="grid_west_high_4_4" type="box" size="0.200 0.200 0.0524" pos="-4.600 2.850 0.0524" material="rough_high" />
+    <geom name="grid_west_high_5_0" type="box" size="0.200 0.200 0.0511" pos="-4.200 1.250 0.0511" material="rough_high" />
+    <geom name="grid_west_high_5_1" type="box" size="0.200 0.200 0.0340" pos="-4.200 1.650 0.0340" material="rough_high" />
+    <geom name="grid_west_high_5_2" type="box" size="0.200 0.200 0.0442" pos="-4.200 2.050 0.0442" material="rough_high" />
+    <geom name="grid_west_high_5_3" type="box" size="0.200 0.200 0.0433" pos="-4.200 2.450 0.0433" material="rough_high" />
+    <geom name="grid_west_high_5_4" type="box" size="0.200 0.200 0.0296" pos="-4.200 2.850 0.0296" material="rough_high" />
+    <geom name="grid_west_high_6_0" type="box" size="0.200 0.200 0.0479" pos="-3.800 1.250 0.0479" material="rough_high" />
+    <geom name="grid_west_high_6_1" type="box" size="0.200 0.200 0.0412" pos="-3.800 1.650 0.0412" material="rough_high" />
+    <geom name="grid_west_high_6_2" type="box" size="0.200 0.200 0.0484" pos="-3.800 2.050 0.0484" material="rough_high" />
+    <geom name="grid_west_high_6_3" type="box" size="0.200 0.200 0.0409" pos="-3.800 2.450 0.0409" material="rough_high" />
+    <geom name="grid_west_high_6_4" type="box" size="0.200 0.200 0.0250" pos="-3.800 2.850 0.0250" material="rough_high" />
+    <geom name="grid_west_high_7_0" type="box" size="0.200 0.200 0.0347" pos="-3.400 1.250 0.0347" material="rough_high" />
+    <geom name="grid_west_high_7_1" type="box" size="0.200 0.200 0.0256" pos="-3.400 1.650 0.0256" material="rough_high" />
+    <geom name="grid_west_high_7_2" type="box" size="0.200 0.200 0.0529" pos="-3.400 2.050 0.0529" material="rough_high" />
+    <geom name="grid_west_high_7_3" type="box" size="0.200 0.200 0.0514" pos="-3.400 2.450 0.0514" material="rough_high" />
+    <geom name="grid_west_high_7_4" type="box" size="0.200 0.200 0.0499" pos="-3.400 2.850 0.0499" material="rough_high" />
+    <geom name="grid_west_high_8_0" type="box" size="0.200 0.200 0.0342" pos="-3.000 1.250 0.0342" material="rough_high" />
+    <geom name="grid_west_high_8_1" type="box" size="0.200 0.200 0.0267" pos="-3.000 1.650 0.0267" material="rough_high" />
+    <geom name="grid_west_high_8_2" type="box" size="0.200 0.200 0.0513" pos="-3.000 2.050 0.0513" material="rough_high" />
+    <geom name="grid_west_high_8_3" type="box" size="0.200 0.200 0.0534" pos="-3.000 2.450 0.0534" material="rough_high" />
+    <geom name="grid_west_high_8_4" type="box" size="0.200 0.200 0.0276" pos="-3.000 2.850 0.0276" material="rough_high" />
+
+    <!-- ==================== 南侧 (-Y)：3组不同网格粒度与幅度的 Random Grid Terrain ==================== -->
+    <!-- 南侧细密随机网格A-低中幅度 (x∈[-2.65, -0.90]): 单元 0.25m×0.25m (7×14), 高度范围 1.5~4.0 cm -->
+    <geom name="grid_south_fine_0_0" type="box" size="0.125 0.125 0.0136" pos="-2.525 -6.625 0.0136" material="rough_low" />
+    <geom name="grid_south_fine_0_1" type="box" size="0.125 0.125 0.0084" pos="-2.525 -6.375 0.0084" material="rough_low" />
+    <geom name="grid_south_fine_0_2" type="box" size="0.125 0.125 0.0170" pos="-2.525 -6.125 0.0170" material="rough_low" />
+    <geom name="grid_south_fine_0_3" type="box" size="0.125 0.125 0.0171" pos="-2.525 -5.875 0.0171" material="rough_low" />
+    <geom name="grid_south_fine_0_4" type="box" size="0.125 0.125 0.0091" pos="-2.525 -5.625 0.0091" material="rough_low" />
+    <geom name="grid_south_fine_0_5" type="box" size="0.125 0.125 0.0134" pos="-2.525 -5.375 0.0134" material="rough_low" />
+    <geom name="grid_south_fine_0_6" type="box" size="0.125 0.125 0.0144" pos="-2.525 -5.125 0.0144" material="rough_low" />
+    <geom name="grid_south_fine_0_7" type="box" size="0.125 0.125 0.0108" pos="-2.525 -4.875 0.0108" material="rough_low" />
+    <geom name="grid_south_fine_0_8" type="box" size="0.125 0.125 0.0184" pos="-2.525 -4.625 0.0184" material="rough_low" />
+    <geom name="grid_south_fine_0_9" type="box" size="0.125 0.125 0.0128" pos="-2.525 -4.375 0.0128" material="rough_low" />
+    <geom name="grid_south_fine_0_10" type="box" size="0.125 0.125 0.0101" pos="-2.525 -4.125 0.0101" material="rough_low" />
+    <geom name="grid_south_fine_0_11" type="box" size="0.125 0.125 0.0142" pos="-2.525 -3.875 0.0142" material="rough_low" />
+    <geom name="grid_south_fine_0_12" type="box" size="0.125 0.125 0.0166" pos="-2.525 -3.625 0.0166" material="rough_low" />
+    <geom name="grid_south_fine_0_13" type="box" size="0.125 0.125 0.0100" pos="-2.525 -3.375 0.0100" material="rough_low" />
+    <geom name="grid_south_fine_1_0" type="box" size="0.125 0.125 0.0114" pos="-2.275 -6.625 0.0114" material="rough_low" />
+    <geom name="grid_south_fine_1_1" type="box" size="0.125 0.125 0.0199" pos="-2.275 -6.375 0.0199" material="rough_low" />
+    <geom name="grid_south_fine_1_2" type="box" size="0.125 0.125 0.0156" pos="-2.275 -6.125 0.0156" material="rough_low" />
+    <geom name="grid_south_fine_1_3" type="box" size="0.125 0.125 0.0130" pos="-2.275 -5.875 0.0130" material="rough_low" />
+    <geom name="grid_south_fine_1_4" type="box" size="0.125 0.125 0.0140" pos="-2.275 -5.625 0.0140" material="rough_low" />
+    <geom name="grid_south_fine_1_5" type="box" size="0.125 0.125 0.0090" pos="-2.275 -5.375 0.0090" material="rough_low" />
+    <geom name="grid_south_fine_1_6" type="box" size="0.125 0.125 0.0103" pos="-2.275 -5.125 0.0103" material="rough_low" />
+    <geom name="grid_south_fine_1_7" type="box" size="0.125 0.125 0.0117" pos="-2.275 -4.875 0.0117" material="rough_low" />
+    <geom name="grid_south_fine_1_8" type="box" size="0.125 0.125 0.0149" pos="-2.275 -4.625 0.0149" material="rough_low" />
+    <geom name="grid_south_fine_1_9" type="box" size="0.125 0.125 0.0104" pos="-2.275 -4.375 0.0104" material="rough_low" />
+    <geom name="grid_south_fine_1_10" type="box" size="0.125 0.125 0.0103" pos="-2.275 -4.125 0.0103" material="rough_low" />
+    <geom name="grid_south_fine_1_11" type="box" size="0.125 0.125 0.0084" pos="-2.275 -3.875 0.0084" material="rough_low" />
+    <geom name="grid_south_fine_1_12" type="box" size="0.125 0.125 0.0154" pos="-2.275 -3.625 0.0154" material="rough_low" />
+    <geom name="grid_south_fine_1_13" type="box" size="0.125 0.125 0.0104" pos="-2.275 -3.375 0.0104" material="rough_low" />
+    <geom name="grid_south_fine_2_0" type="box" size="0.125 0.125 0.0188" pos="-2.025 -6.625 0.0188" material="rough_low" />
+    <geom name="grid_south_fine_2_1" type="box" size="0.125 0.125 0.0182" pos="-2.025 -6.375 0.0182" material="rough_low" />
+    <geom name="grid_south_fine_2_2" type="box" size="0.125 0.125 0.0084" pos="-2.025 -6.125 0.0084" material="rough_low" />
+    <geom name="grid_south_fine_2_3" type="box" size="0.125 0.125 0.0105" pos="-2.025 -5.875 0.0105" material="rough_low" />
+    <geom name="grid_south_fine_2_4" type="box" size="0.125 0.125 0.0159" pos="-2.025 -5.625 0.0159" material="rough_low" />
+    <geom name="grid_south_fine_2_5" type="box" size="0.125 0.125 0.0102" pos="-2.025 -5.375 0.0102" material="rough_low" />
+    <geom name="grid_south_fine_2_6" type="box" size="0.125 0.125 0.0092" pos="-2.025 -5.125 0.0092" material="rough_low" />
+    <geom name="grid_south_fine_2_7" type="box" size="0.125 0.125 0.0192" pos="-2.025 -4.875 0.0192" material="rough_low" />
+    <geom name="grid_south_fine_2_8" type="box" size="0.125 0.125 0.0146" pos="-2.025 -4.625 0.0146" material="rough_low" />
+    <geom name="grid_south_fine_2_9" type="box" size="0.125 0.125 0.0134" pos="-2.025 -4.375 0.0134" material="rough_low" />
+    <geom name="grid_south_fine_2_10" type="box" size="0.125 0.125 0.0173" pos="-2.025 -4.125 0.0173" material="rough_low" />
+    <geom name="grid_south_fine_2_11" type="box" size="0.125 0.125 0.0176" pos="-2.025 -3.875 0.0176" material="rough_low" />
+    <geom name="grid_south_fine_2_12" type="box" size="0.125 0.125 0.0099" pos="-2.025 -3.625 0.0099" material="rough_low" />
+    <geom name="grid_south_fine_2_13" type="box" size="0.125 0.125 0.0087" pos="-2.025 -3.375 0.0087" material="rough_low" />
+    <geom name="grid_south_fine_3_0" type="box" size="0.125 0.125 0.0129" pos="-1.775 -6.625 0.0129" material="rough_low" />
+    <geom name="grid_south_fine_3_1" type="box" size="0.125 0.125 0.0128" pos="-1.775 -6.375 0.0128" material="rough_low" />
+    <geom name="grid_south_fine_3_2" type="box" size="0.125 0.125 0.0133" pos="-1.775 -6.125 0.0133" material="rough_low" />
+    <geom name="grid_south_fine_3_3" type="box" size="0.125 0.125 0.0166" pos="-1.775 -5.875 0.0166" material="rough_low" />
+    <geom name="grid_south_fine_3_4" type="box" size="0.125 0.125 0.0159" pos="-1.775 -5.625 0.0159" material="rough_low" />
+    <geom name="grid_south_fine_3_5" type="box" size="0.125 0.125 0.0198" pos="-1.775 -5.375 0.0198" material="rough_low" />
+    <geom name="grid_south_fine_3_6" type="box" size="0.125 0.125 0.0087" pos="-1.775 -5.125 0.0087" material="rough_low" />
+    <geom name="grid_south_fine_3_7" type="box" size="0.125 0.125 0.0125" pos="-1.775 -4.875 0.0125" material="rough_low" />
+    <geom name="grid_south_fine_3_8" type="box" size="0.125 0.125 0.0117" pos="-1.775 -4.625 0.0117" material="rough_low" />
+    <geom name="grid_south_fine_3_9" type="box" size="0.125 0.125 0.0183" pos="-1.775 -4.375 0.0183" material="rough_low" />
+    <geom name="grid_south_fine_3_10" type="box" size="0.125 0.125 0.0106" pos="-1.775 -4.125 0.0106" material="rough_low" />
+    <geom name="grid_south_fine_3_11" type="box" size="0.125 0.125 0.0099" pos="-1.775 -3.875 0.0099" material="rough_low" />
+    <geom name="grid_south_fine_3_12" type="box" size="0.125 0.125 0.0131" pos="-1.775 -3.625 0.0131" material="rough_low" />
+    <geom name="grid_south_fine_3_13" type="box" size="0.125 0.125 0.0128" pos="-1.775 -3.375 0.0128" material="rough_low" />
+    <geom name="grid_south_fine_4_0" type="box" size="0.125 0.125 0.0110" pos="-1.525 -6.625 0.0110" material="rough_low" />
+    <geom name="grid_south_fine_4_1" type="box" size="0.125 0.125 0.0106" pos="-1.525 -6.375 0.0106" material="rough_low" />
+    <geom name="grid_south_fine_4_2" type="box" size="0.125 0.125 0.0190" pos="-1.525 -6.125 0.0190" material="rough_low" />
+    <geom name="grid_south_fine_4_3" type="box" size="0.125 0.125 0.0130" pos="-1.525 -5.875 0.0130" material="rough_low" />
+    <geom name="grid_south_fine_4_4" type="box" size="0.125 0.125 0.0183" pos="-1.525 -5.625 0.0183" material="rough_low" />
+    <geom name="grid_south_fine_4_5" type="box" size="0.125 0.125 0.0144" pos="-1.525 -5.375 0.0144" material="rough_low" />
+    <geom name="grid_south_fine_4_6" type="box" size="0.125 0.125 0.0081" pos="-1.525 -5.125 0.0081" material="rough_low" />
+    <geom name="grid_south_fine_4_7" type="box" size="0.125 0.125 0.0200" pos="-1.525 -4.875 0.0200" material="rough_low" />
+    <geom name="grid_south_fine_4_8" type="box" size="0.125 0.125 0.0180" pos="-1.525 -4.625 0.0180" material="rough_low" />
+    <geom name="grid_south_fine_4_9" type="box" size="0.125 0.125 0.0196" pos="-1.525 -4.375 0.0196" material="rough_low" />
+    <geom name="grid_south_fine_4_10" type="box" size="0.125 0.125 0.0191" pos="-1.525 -4.125 0.0191" material="rough_low" />
+    <geom name="grid_south_fine_4_11" type="box" size="0.125 0.125 0.0181" pos="-1.525 -3.875 0.0181" material="rough_low" />
+    <geom name="grid_south_fine_4_12" type="box" size="0.125 0.125 0.0096" pos="-1.525 -3.625 0.0096" material="rough_low" />
+    <geom name="grid_south_fine_4_13" type="box" size="0.125 0.125 0.0136" pos="-1.525 -3.375 0.0136" material="rough_low" />
+    <geom name="grid_south_fine_5_0" type="box" size="0.125 0.125 0.0102" pos="-1.275 -6.625 0.0102" material="rough_low" />
+    <geom name="grid_south_fine_5_1" type="box" size="0.125 0.125 0.0125" pos="-1.275 -6.375 0.0125" material="rough_low" />
+    <geom name="grid_south_fine_5_2" type="box" size="0.125 0.125 0.0082" pos="-1.275 -6.125 0.0082" material="rough_low" />
+    <geom name="grid_south_fine_5_3" type="box" size="0.125 0.125 0.0122" pos="-1.275 -5.875 0.0122" material="rough_low" />
+    <geom name="grid_south_fine_5_4" type="box" size="0.125 0.125 0.0198" pos="-1.275 -5.625 0.0198" material="rough_low" />
+    <geom name="grid_south_fine_5_5" type="box" size="0.125 0.125 0.0108" pos="-1.275 -5.375 0.0108" material="rough_low" />
+    <geom name="grid_south_fine_5_6" type="box" size="0.125 0.125 0.0173" pos="-1.275 -5.125 0.0173" material="rough_low" />
+    <geom name="grid_south_fine_5_7" type="box" size="0.125 0.125 0.0132" pos="-1.275 -4.875 0.0132" material="rough_low" />
+    <geom name="grid_south_fine_5_8" type="box" size="0.125 0.125 0.0128" pos="-1.275 -4.625 0.0128" material="rough_low" />
+    <geom name="grid_south_fine_5_9" type="box" size="0.125 0.125 0.0195" pos="-1.275 -4.375 0.0195" material="rough_low" />
+    <geom name="grid_south_fine_5_10" type="box" size="0.125 0.125 0.0199" pos="-1.275 -4.125 0.0199" material="rough_low" />
+    <geom name="grid_south_fine_5_11" type="box" size="0.125 0.125 0.0144" pos="-1.275 -3.875 0.0144" material="rough_low" />
+    <geom name="grid_south_fine_5_12" type="box" size="0.125 0.125 0.0165" pos="-1.275 -3.625 0.0165" material="rough_low" />
+    <geom name="grid_south_fine_5_13" type="box" size="0.125 0.125 0.0094" pos="-1.275 -3.375 0.0094" material="rough_low" />
+    <geom name="grid_south_fine_6_0" type="box" size="0.125 0.125 0.0112" pos="-1.025 -6.625 0.0112" material="rough_low" />
+    <geom name="grid_south_fine_6_1" type="box" size="0.125 0.125 0.0196" pos="-1.025 -6.375 0.0196" material="rough_low" />
+    <geom name="grid_south_fine_6_2" type="box" size="0.125 0.125 0.0147" pos="-1.025 -6.125 0.0147" material="rough_low" />
+    <geom name="grid_south_fine_6_3" type="box" size="0.125 0.125 0.0143" pos="-1.025 -5.875 0.0143" material="rough_low" />
+    <geom name="grid_south_fine_6_4" type="box" size="0.125 0.125 0.0168" pos="-1.025 -5.625 0.0168" material="rough_low" />
+    <geom name="grid_south_fine_6_5" type="box" size="0.125 0.125 0.0082" pos="-1.025 -5.375 0.0082" material="rough_low" />
+    <geom name="grid_south_fine_6_6" type="box" size="0.125 0.125 0.0148" pos="-1.025 -5.125 0.0148" material="rough_low" />
+    <geom name="grid_south_fine_6_7" type="box" size="0.125 0.125 0.0138" pos="-1.025 -4.875 0.0138" material="rough_low" />
+    <geom name="grid_south_fine_6_8" type="box" size="0.125 0.125 0.0182" pos="-1.025 -4.625 0.0182" material="rough_low" />
+    <geom name="grid_south_fine_6_9" type="box" size="0.125 0.125 0.0095" pos="-1.025 -4.375 0.0095" material="rough_low" />
+    <geom name="grid_south_fine_6_10" type="box" size="0.125 0.125 0.0195" pos="-1.025 -4.125 0.0195" material="rough_low" />
+    <geom name="grid_south_fine_6_11" type="box" size="0.125 0.125 0.0085" pos="-1.025 -3.875 0.0085" material="rough_low" />
+    <geom name="grid_south_fine_6_12" type="box" size="0.125 0.125 0.0098" pos="-1.025 -3.625 0.0098" material="rough_low" />
+    <geom name="grid_south_fine_6_13" type="box" size="0.125 0.125 0.0149" pos="-1.025 -3.375 0.0149" material="rough_low" />
+
+    <!-- 南侧中粒度随机网格B-中高幅度 (x∈[-0.85, +0.85]): 单元 0.34m×0.35m (5×10), 高度范围 3.0~7.5 cm -->
+    <geom name="grid_south_med_0_0" type="box" size="0.170 0.175 0.0302" pos="-0.680 -6.575 0.0302" material="rough_med" />
+    <geom name="grid_south_med_0_1" type="box" size="0.170 0.175 0.0203" pos="-0.680 -6.225 0.0203" material="rough_med" />
+    <geom name="grid_south_med_0_2" type="box" size="0.170 0.175 0.0177" pos="-0.680 -5.875 0.0177" material="rough_med" />
+    <geom name="grid_south_med_0_3" type="box" size="0.170 0.175 0.0350" pos="-0.680 -5.525 0.0350" material="rough_med" />
+    <geom name="grid_south_med_0_4" type="box" size="0.170 0.175 0.0205" pos="-0.680 -5.175 0.0205" material="rough_med" />
+    <geom name="grid_south_med_0_5" type="box" size="0.170 0.175 0.0284" pos="-0.680 -4.825 0.0284" material="rough_med" />
+    <geom name="grid_south_med_0_6" type="box" size="0.170 0.175 0.0289" pos="-0.680 -4.475 0.0289" material="rough_med" />
+    <geom name="grid_south_med_0_7" type="box" size="0.170 0.175 0.0244" pos="-0.680 -4.125 0.0244" material="rough_med" />
+    <geom name="grid_south_med_0_8" type="box" size="0.170 0.175 0.0281" pos="-0.680 -3.775 0.0281" material="rough_med" />
+    <geom name="grid_south_med_0_9" type="box" size="0.170 0.175 0.0268" pos="-0.680 -3.425 0.0268" material="rough_med" />
+    <geom name="grid_south_med_1_0" type="box" size="0.170 0.175 0.0360" pos="-0.340 -6.575 0.0360" material="rough_med" />
+    <geom name="grid_south_med_1_1" type="box" size="0.170 0.175 0.0196" pos="-0.340 -6.225 0.0196" material="rough_med" />
+    <geom name="grid_south_med_1_2" type="box" size="0.170 0.175 0.0311" pos="-0.340 -5.875 0.0311" material="rough_med" />
+    <geom name="grid_south_med_1_3" type="box" size="0.170 0.175 0.0204" pos="-0.340 -5.525 0.0204" material="rough_med" />
+    <geom name="grid_south_med_1_4" type="box" size="0.170 0.175 0.0239" pos="-0.340 -5.175 0.0239" material="rough_med" />
+    <geom name="grid_south_med_1_5" type="box" size="0.170 0.175 0.0301" pos="-0.340 -4.825 0.0301" material="rough_med" />
+    <geom name="grid_south_med_1_6" type="box" size="0.170 0.175 0.0217" pos="-0.340 -4.475 0.0217" material="rough_med" />
+    <geom name="grid_south_med_1_7" type="box" size="0.170 0.175 0.0221" pos="-0.340 -4.125 0.0221" material="rough_med" />
+    <geom name="grid_south_med_1_8" type="box" size="0.170 0.175 0.0319" pos="-0.340 -3.775 0.0319" material="rough_med" />
+    <geom name="grid_south_med_1_9" type="box" size="0.170 0.175 0.0166" pos="-0.340 -3.425 0.0166" material="rough_med" />
+    <geom name="grid_south_med_2_0" type="box" size="0.170 0.175 0.0253" pos="0.000 -6.575 0.0253" material="rough_med" />
+    <geom name="grid_south_med_2_1" type="box" size="0.170 0.175 0.0375" pos="0.000 -6.225 0.0375" material="rough_med" />
+    <geom name="grid_south_med_2_2" type="box" size="0.170 0.175 0.0374" pos="0.000 -5.875 0.0374" material="rough_med" />
+    <geom name="grid_south_med_2_3" type="box" size="0.170 0.175 0.0166" pos="0.000 -5.525 0.0166" material="rough_med" />
+    <geom name="grid_south_med_2_4" type="box" size="0.170 0.175 0.0198" pos="0.000 -5.175 0.0198" material="rough_med" />
+    <geom name="grid_south_med_2_5" type="box" size="0.170 0.175 0.0210" pos="0.000 -4.825 0.0210" material="rough_med" />
+    <geom name="grid_south_med_2_6" type="box" size="0.170 0.175 0.0360" pos="0.000 -4.475 0.0360" material="rough_med" />
+    <geom name="grid_south_med_2_7" type="box" size="0.170 0.175 0.0348" pos="0.000 -4.125 0.0348" material="rough_med" />
+    <geom name="grid_south_med_2_8" type="box" size="0.170 0.175 0.0348" pos="0.000 -3.775 0.0348" material="rough_med" />
+    <geom name="grid_south_med_2_9" type="box" size="0.170 0.175 0.0233" pos="0.000 -3.425 0.0233" material="rough_med" />
+    <geom name="grid_south_med_3_0" type="box" size="0.170 0.175 0.0185" pos="0.340 -6.575 0.0185" material="rough_med" />
+    <geom name="grid_south_med_3_1" type="box" size="0.170 0.175 0.0338" pos="0.340 -6.225 0.0338" material="rough_med" />
+    <geom name="grid_south_med_3_2" type="box" size="0.170 0.175 0.0308" pos="0.340 -5.875 0.0308" material="rough_med" />
+    <geom name="grid_south_med_3_3" type="box" size="0.170 0.175 0.0288" pos="0.340 -5.525 0.0288" material="rough_med" />
+    <geom name="grid_south_med_3_4" type="box" size="0.170 0.175 0.0372" pos="0.340 -5.175 0.0372" material="rough_med" />
+    <geom name="grid_south_med_3_5" type="box" size="0.170 0.175 0.0297" pos="0.340 -4.825 0.0297" material="rough_med" />
+    <geom name="grid_south_med_3_6" type="box" size="0.170 0.175 0.0152" pos="0.340 -4.475 0.0152" material="rough_med" />
+    <geom name="grid_south_med_3_7" type="box" size="0.170 0.175 0.0334" pos="0.340 -4.125 0.0334" material="rough_med" />
+    <geom name="grid_south_med_3_8" type="box" size="0.170 0.175 0.0217" pos="0.340 -3.775 0.0217" material="rough_med" />
+    <geom name="grid_south_med_3_9" type="box" size="0.170 0.175 0.0299" pos="0.340 -3.425 0.0299" material="rough_med" />
+    <geom name="grid_south_med_4_0" type="box" size="0.170 0.175 0.0361" pos="0.680 -6.575 0.0361" material="rough_med" />
+    <geom name="grid_south_med_4_1" type="box" size="0.170 0.175 0.0180" pos="0.680 -6.225 0.0180" material="rough_med" />
+    <geom name="grid_south_med_4_2" type="box" size="0.170 0.175 0.0176" pos="0.680 -5.875 0.0176" material="rough_med" />
+    <geom name="grid_south_med_4_3" type="box" size="0.170 0.175 0.0174" pos="0.680 -5.525 0.0174" material="rough_med" />
+    <geom name="grid_south_med_4_4" type="box" size="0.170 0.175 0.0274" pos="0.680 -5.175 0.0274" material="rough_med" />
+    <geom name="grid_south_med_4_5" type="box" size="0.170 0.175 0.0211" pos="0.680 -4.825 0.0211" material="rough_med" />
+    <geom name="grid_south_med_4_6" type="box" size="0.170 0.175 0.0286" pos="0.680 -4.475 0.0286" material="rough_med" />
+    <geom name="grid_south_med_4_7" type="box" size="0.170 0.175 0.0311" pos="0.680 -4.125 0.0311" material="rough_med" />
+    <geom name="grid_south_med_4_8" type="box" size="0.170 0.175 0.0196" pos="0.680 -3.775 0.0196" material="rough_med" />
+    <geom name="grid_south_med_4_9" type="box" size="0.170 0.175 0.0293" pos="0.680 -3.425 0.0293" material="rough_med" />
+
+    <!-- 南侧粗粒度随机网格C-极限高幅度 (x∈[+0.90, +2.65]): 单元 0.35m×0.35m (5×10), 高度范围 5.0~12.0 cm -->
+    <geom name="grid_south_coarse_0_0" type="box" size="0.175 0.175 0.0342" pos="1.075 -6.575 0.0342" material="rough_high" />
+    <geom name="grid_south_coarse_0_1" type="box" size="0.175 0.175 0.0421" pos="1.075 -6.225 0.0421" material="rough_high" />
+    <geom name="grid_south_coarse_0_2" type="box" size="0.175 0.175 0.0567" pos="1.075 -5.875 0.0567" material="rough_high" />
+    <geom name="grid_south_coarse_0_3" type="box" size="0.175 0.175 0.0546" pos="1.075 -5.525 0.0546" material="rough_high" />
+    <geom name="grid_south_coarse_0_4" type="box" size="0.175 0.175 0.0282" pos="1.075 -5.175 0.0282" material="rough_high" />
+    <geom name="grid_south_coarse_0_5" type="box" size="0.175 0.175 0.0398" pos="1.075 -4.825 0.0398" material="rough_high" />
+    <geom name="grid_south_coarse_0_6" type="box" size="0.175 0.175 0.0347" pos="1.075 -4.475 0.0347" material="rough_high" />
+    <geom name="grid_south_coarse_0_7" type="box" size="0.175 0.175 0.0251" pos="1.075 -4.125 0.0251" material="rough_high" />
+    <geom name="grid_south_coarse_0_8" type="box" size="0.175 0.175 0.0520" pos="1.075 -3.775 0.0520" material="rough_high" />
+    <geom name="grid_south_coarse_0_9" type="box" size="0.175 0.175 0.0473" pos="1.075 -3.425 0.0473" material="rough_high" />
+    <geom name="grid_south_coarse_1_0" type="box" size="0.175 0.175 0.0342" pos="1.425 -6.575 0.0342" material="rough_high" />
+    <geom name="grid_south_coarse_1_1" type="box" size="0.175 0.175 0.0509" pos="1.425 -6.225 0.0509" material="rough_high" />
+    <geom name="grid_south_coarse_1_2" type="box" size="0.175 0.175 0.0443" pos="1.425 -5.875 0.0443" material="rough_high" />
+    <geom name="grid_south_coarse_1_3" type="box" size="0.175 0.175 0.0400" pos="1.425 -5.525 0.0400" material="rough_high" />
+    <geom name="grid_south_coarse_1_4" type="box" size="0.175 0.175 0.0253" pos="1.425 -5.175 0.0253" material="rough_high" />
+    <geom name="grid_south_coarse_1_5" type="box" size="0.175 0.175 0.0276" pos="1.425 -4.825 0.0276" material="rough_high" />
+    <geom name="grid_south_coarse_1_6" type="box" size="0.175 0.175 0.0559" pos="1.425 -4.475 0.0559" material="rough_high" />
+    <geom name="grid_south_coarse_1_7" type="box" size="0.175 0.175 0.0566" pos="1.425 -4.125 0.0566" material="rough_high" />
+    <geom name="grid_south_coarse_1_8" type="box" size="0.175 0.175 0.0441" pos="1.425 -3.775 0.0441" material="rough_high" />
+    <geom name="grid_south_coarse_1_9" type="box" size="0.175 0.175 0.0542" pos="1.425 -3.425 0.0542" material="rough_high" />
+    <geom name="grid_south_coarse_2_0" type="box" size="0.175 0.175 0.0454" pos="1.775 -6.575 0.0454" material="rough_high" />
+    <geom name="grid_south_coarse_2_1" type="box" size="0.175 0.175 0.0302" pos="1.775 -6.225 0.0302" material="rough_high" />
+    <geom name="grid_south_coarse_2_2" type="box" size="0.175 0.175 0.0295" pos="1.775 -5.875 0.0295" material="rough_high" />
+    <geom name="grid_south_coarse_2_3" type="box" size="0.175 0.175 0.0358" pos="1.775 -5.525 0.0358" material="rough_high" />
+    <geom name="grid_south_coarse_2_4" type="box" size="0.175 0.175 0.0565" pos="1.775 -5.175 0.0565" material="rough_high" />
+    <geom name="grid_south_coarse_2_5" type="box" size="0.175 0.175 0.0529" pos="1.775 -4.825 0.0529" material="rough_high" />
+    <geom name="grid_south_coarse_2_6" type="box" size="0.175 0.175 0.0551" pos="1.775 -4.475 0.0551" material="rough_high" />
+    <geom name="grid_south_coarse_2_7" type="box" size="0.175 0.175 0.0565" pos="1.775 -4.125 0.0565" material="rough_high" />
+    <geom name="grid_south_coarse_2_8" type="box" size="0.175 0.175 0.0324" pos="1.775 -3.775 0.0324" material="rough_high" />
+    <geom name="grid_south_coarse_2_9" type="box" size="0.175 0.175 0.0337" pos="1.775 -3.425 0.0337" material="rough_high" />
+    <geom name="grid_south_coarse_3_0" type="box" size="0.175 0.175 0.0286" pos="2.125 -6.575 0.0286" material="rough_high" />
+    <geom name="grid_south_coarse_3_1" type="box" size="0.175 0.175 0.0523" pos="2.125 -6.225 0.0523" material="rough_high" />
+    <geom name="grid_south_coarse_3_2" type="box" size="0.175 0.175 0.0559" pos="2.125 -5.875 0.0559" material="rough_high" />
+    <geom name="grid_south_coarse_3_3" type="box" size="0.175 0.175 0.0392" pos="2.125 -5.525 0.0392" material="rough_high" />
+    <geom name="grid_south_coarse_3_4" type="box" size="0.175 0.175 0.0467" pos="2.125 -5.175 0.0467" material="rough_high" />
+    <geom name="grid_south_coarse_3_5" type="box" size="0.175 0.175 0.0304" pos="2.125 -4.825 0.0304" material="rough_high" />
+    <geom name="grid_south_coarse_3_6" type="box" size="0.175 0.175 0.0575" pos="2.125 -4.475 0.0575" material="rough_high" />
+    <geom name="grid_south_coarse_3_7" type="box" size="0.175 0.175 0.0553" pos="2.125 -4.125 0.0553" material="rough_high" />
+    <geom name="grid_south_coarse_3_8" type="box" size="0.175 0.175 0.0592" pos="2.125 -3.775 0.0592" material="rough_high" />
+    <geom name="grid_south_coarse_3_9" type="box" size="0.175 0.175 0.0534" pos="2.125 -3.425 0.0534" material="rough_high" />
+    <geom name="grid_south_coarse_4_0" type="box" size="0.175 0.175 0.0558" pos="2.475 -6.575 0.0558" material="rough_high" />
+    <geom name="grid_south_coarse_4_1" type="box" size="0.175 0.175 0.0259" pos="2.475 -6.225 0.0259" material="rough_high" />
+    <geom name="grid_south_coarse_4_2" type="box" size="0.175 0.175 0.0508" pos="2.475 -5.875 0.0508" material="rough_high" />
+    <geom name="grid_south_coarse_4_3" type="box" size="0.175 0.175 0.0366" pos="2.475 -5.525 0.0366" material="rough_high" />
+    <geom name="grid_south_coarse_4_4" type="box" size="0.175 0.175 0.0576" pos="2.475 -5.175 0.0576" material="rough_high" />
+    <geom name="grid_south_coarse_4_5" type="box" size="0.175 0.175 0.0531" pos="2.475 -4.825 0.0531" material="rough_high" />
+    <geom name="grid_south_coarse_4_6" type="box" size="0.175 0.175 0.0552" pos="2.475 -4.475 0.0552" material="rough_high" />
+    <geom name="grid_south_coarse_4_7" type="box" size="0.175 0.175 0.0534" pos="2.475 -4.125 0.0534" material="rough_high" />
+    <geom name="grid_south_coarse_4_8" type="box" size="0.175 0.175 0.0343" pos="2.475 -3.775 0.0343" material="rough_high" />
+    <geom name="grid_south_coarse_4_9" type="box" size="0.175 0.175 0.0526" pos="2.475 -3.425 0.0526" material="rough_high" />
+
   </worldbody>
 </mujoco>
