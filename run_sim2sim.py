@@ -19,6 +19,7 @@ import mujoco.viewer
 import numpy as np
 from omegaconf import OmegaConf     # .yaml文件读取库
 
+from sim2sim.actuator import PDMotor    # 底层执行器模型（PD）
 from sim2sim.command import KeyboardCommand     # command指令
 from sim2sim.mapping import build_joint_order, quat_rotate_inverse  # 仿真关节映射/四元数转换
 from sim2sim.policy import make_policy  # policy网络加载
@@ -75,6 +76,10 @@ def main():
         float(cfg.hip_action_scale) if "_hip_joint" in name else float(cfg.leg_action_scale)
         for name in list(cfg.isaaclab_joint_names)[:leg_count]
     ])
+
+    # PD执行器加载：腿部位置 PD，轮子速度 PD
+    leg_motor = PDMotor(cfg.leg_kp, cfg.leg_kd, cfg.effort_limit)
+    wheel_motor = PDMotor(0.0, cfg.wheel_kd, cfg.effort_limit)
 
     # 初始化last-action为零动作
     last_action = np.zeros(16, dtype=np.float32)
@@ -159,14 +164,9 @@ def main():
                 q = data.qpos[7:23][mj_to_isaac]
                 qd = data.qvel[6:22][mj_to_isaac]
                 tau = np.empty(16)
-                tau[:leg_count] = (
-                    float(cfg.leg_kp) * (q_des - q[:leg_count])
-                    - float(cfg.leg_kd) * qd[:leg_count]
-                )
-                tau[leg_count:] = float(cfg.wheel_kd) * (v_des - qd[leg_count:])
-                data.ctrl[:] = np.clip(
-                    tau, -float(cfg.effort_limit), float(cfg.effort_limit)
-                )[isaac_to_mj_ctrl]
+                tau[:leg_count] = leg_motor.adjust(q[:leg_count], qd[:leg_count], q_des=q_des)
+                tau[leg_count:] = wheel_motor.adjust(q[leg_count:], qd[leg_count:], v_des=v_des)
+                data.ctrl[:] = tau[isaac_to_mj_ctrl]
                 mujoco.mj_step(model, data)
 
             # 把最新状态同步到可视化窗口
