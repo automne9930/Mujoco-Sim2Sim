@@ -26,6 +26,9 @@ from sim2sim.policy import make_policy  # policy网络加载
 
 
 def main():
+    #=============================================
+    # CLI参数解析
+    #=============================================
     # CLI附加参数，后续通过 args.config、args.policy、args.cmd 即可提取对应配置
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="configs/go2w_robot_lab.yaml")
@@ -33,6 +36,9 @@ def main():
     parser.add_argument("--cmd", type=float, nargs=3, metavar=("VX", "VY", "WZ"),help="固定指令，给定时不启用键盘")
     args = parser.parse_args()
 
+    #=============================================
+    # 读取yaml配置文件
+    #=============================================
     # 锁定根目录位置，赋于变量root
     root = Path(__file__).resolve().parent
 
@@ -44,6 +50,14 @@ def main():
     if not scene.is_absolute():
         scene = root / scene
 
+    # 从yaml文件中读取仿真dt、策略分频倍数、腿部自由度数量
+    sim_dt = float(cfg.sim_dt)
+    decimation = int(cfg.decimation)
+    leg_count = int(cfg.leg_joint_count)
+
+    #=============================================
+    # Policy网络加载
+    #=============================================
     # 读取policy路径
     if args.policy is not None:
         policy_path = None if args.policy.lower() == "none" else Path(args.policy)
@@ -55,16 +69,17 @@ def main():
     # 自定义推理函数infer（如果是None Policy则返回16个0的action）
     infer = make_policy(policy_path) if policy_path is not None else (lambda obs: np.zeros(16, dtype=np.float32))
 
-    # 从yaml文件中读取仿真dt、策略分频倍数、腿部自由度数量
-    sim_dt = float(cfg.sim_dt)
-    decimation = int(cfg.decimation)
-    leg_count = int(cfg.leg_joint_count)
-
+    #=============================================
+    # Mujoco初始化
+    #=============================================
     # Mujoco初始化（model+data）
     model = mujoco.MjModel.from_xml_path(str(scene))
     model.opt.timestep = sim_dt
     data = mujoco.MjData(model)
 
+    #=============================================
+    # 关节映射与默认姿态
+    #=============================================
     # 从yaml文件中读取Mujoco和IsaacSim的关节顺序转换列表
     mj_to_isaac, isaac_to_mj_obs, isaac_to_mj_ctrl = build_joint_order(cfg)
 
@@ -77,6 +92,9 @@ def main():
         for name in list(cfg.isaaclab_joint_names)[:leg_count]
     ])
 
+    #=============================================
+    # 执行器与状态初始化
+    #=============================================
     # PD执行器加载：腿部位置 PD，轮子速度 PD
     leg_motor = PDMotor(cfg.leg_kp, cfg.leg_kd, cfg.effort_limit)
     wheel_motor = PDMotor(0.0, cfg.wheel_kd, cfg.effort_limit)
@@ -84,6 +102,9 @@ def main():
     # 初始化last-action为零动作
     last_action = np.zeros(16, dtype=np.float32)
 
+    #=============================================
+    # command初始化
+    #=============================================
     # command相关
     if args.cmd is not None:    # 固定指令模式
         fixed_cmd = np.array(args.cmd, dtype=np.float64)
@@ -93,6 +114,9 @@ def main():
         keyboard = KeyboardCommand(cfg)
         get_cmd, consume_reset = keyboard.command, keyboard.consume_reset
 
+    #=============================================
+    # reset函数
+    #=============================================
     # reset函数
     def reset():
         mujoco.mj_resetData(model, data)
@@ -101,15 +125,20 @@ def main():
         data.qpos[7:23] = default_q[isaac_to_mj_obs]
         last_action[:] = 0.0
         mujoco.mj_forward(model, data)  # 手动计算一次，清理reset前的脏数据
+        
+    reset()     # 执行一次reset
 
-    reset()
-
-    # 注册一个mujoco.viewer
+    #=============================================
+    # mujoco.viewer可视化窗口
+    #=============================================
+    # 注册mujoco.viewer可视化窗口
     with mujoco.viewer.launch_passive(model, data) as viewer:
         # 先获取一次真实时间，每次循环计算完之后最后加上dt作为“预期下一轮开始的时间”，保持仿真与真实时间一致
         t_next = time.perf_counter()
 
-        # 主循环
+        #=============================================
+        # while主循环开始
+        #=============================================
         while viewer.is_running():
             # 检测reset
             if consume_reset():
