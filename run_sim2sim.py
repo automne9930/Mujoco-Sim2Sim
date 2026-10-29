@@ -151,6 +151,9 @@ def main():
             q_des = default_q[:leg_count] + action[:leg_count] * leg_scale
             v_des = np.clip(action[leg_count:] * float(cfg.wheel_action_scale), -float(cfg.velocity_limit), float(cfg.velocity_limit))
 
+            #=============================================
+            # action赋入Mujoco执行器
+            #=============================================
             # 策略分频并ctrl（例如仿真0.02s，分频decimation=5，那么0.1s内5个仿真步用同一次输出action）
             for i in range(decimation):
                 q = data.qpos[7:23][mj_to_isaac]
