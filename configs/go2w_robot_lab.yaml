@@ -29,7 +29,9 @@ mujoco_actuator_names: [FL_hip_joint, FL_thigh_joint, FL_calf_joint, FL_foot_joi
 
 # ---- 动作 / 默认姿态（Isaac 顺序）----
 leg_joint_count: 12
-default_joint_pos: [0.0, 0.8, -1.5, 0.0, 0.8, -1.5, 0.0, 0.8, -1.5, 0.0, 0.8, -1.5,
+default_joint_pos: [0.0, 0.8, -1.5, 0.0, 
+                    0.8, -1.5, 0.0, 0.8,
+                    -1.5, 0.0, 0.8, -1.5,
                     0.0, 0.0, 0.0, 0.0]
 leg_action_scale: 0.25
 hip_action_scale: 0.125
