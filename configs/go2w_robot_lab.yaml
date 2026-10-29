@@ -10,61 +10,22 @@ sim_dt: 0.005
 decimation: 4
 
 # ---- 策略输入/输出顺序（robot_lab，观测与动作同序）----
-isaaclab_joint_names:
-  - FR_hip_joint
-  - FR_thigh_joint
-  - FR_calf_joint
-  - FL_hip_joint
-  - FL_thigh_joint
-  - FL_calf_joint
-  - RR_hip_joint
-  - RR_thigh_joint
-  - RR_calf_joint
-  - RL_hip_joint
-  - RL_thigh_joint
-  - RL_calf_joint
-  - FR_foot_joint
-  - FL_foot_joint
-  - RR_foot_joint
-  - RL_foot_joint
+isaaclab_joint_names: [FR_hip_joint, FR_thigh_joint, FR_calf_joint, FL_hip_joint, 
+                       FL_thigh_joint, FL_calf_joint, RR_hip_joint, RR_thigh_joint,
+                       RR_calf_joint, RL_hip_joint, RL_thigh_joint, RL_calf_joint,
+                       FR_foot_joint, FL_foot_joint, RR_foot_joint, RL_foot_joint]
 
 # ---- MuJoCo go2w.xml 中 qpos[7:23] / qvel[6:22] 的顺序 ----
-mujoco_obs_joint_names:
-  - FL_hip_joint
-  - FL_thigh_joint
-  - FL_calf_joint
-  - FL_foot_joint
-  - FR_hip_joint
-  - FR_thigh_joint
-  - FR_calf_joint
-  - FR_foot_joint
-  - RL_hip_joint
-  - RL_thigh_joint
-  - RL_calf_joint
-  - RL_foot_joint
-  - RR_hip_joint
-  - RR_thigh_joint
-  - RR_calf_joint
-  - RR_foot_joint
+mujoco_obs_joint_names: [FL_hip_joint, FL_thigh_joint, FL_calf_joint, FL_foot_joint,
+                         FR_hip_joint, FR_thigh_joint, FR_calf_joint, FR_foot_joint,
+                         RL_hip_joint, RL_thigh_joint, RL_calf_joint, RL_foot_joint, 
+                         RR_hip_joint, RR_thigh_joint, RR_calf_joint, RR_foot_joint]
 
 # ---- MuJoCo go2w.xml 中 ctrl[:] 的 actuator 顺序（目前与关节顺序相同）----
-mujoco_actuator_names:
-  - FL_hip_joint
-  - FL_thigh_joint
-  - FL_calf_joint
-  - FL_foot_joint
-  - FR_hip_joint
-  - FR_thigh_joint
-  - FR_calf_joint
-  - FR_foot_joint
-  - RL_hip_joint
-  - RL_thigh_joint
-  - RL_calf_joint
-  - RL_foot_joint
-  - RR_hip_joint
-  - RR_thigh_joint
-  - RR_calf_joint
-  - RR_foot_joint
+mujoco_actuator_names: [FL_hip_joint, FL_thigh_joint, FL_calf_joint, FL_foot_joint,
+                        FR_hip_joint, FR_thigh_joint, FR_calf_joint, FR_foot_joint,
+                        RL_hip_joint, RL_thigh_joint, RL_calf_joint, RL_foot_joint, 
+                        RR_hip_joint, RR_thigh_joint, RR_calf_joint, RR_foot_joint]
 
 # ---- 动作 / 默认姿态（Isaac 顺序）----
 leg_joint_count: 12
