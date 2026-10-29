@@ -125,7 +125,7 @@ def main():
         data.qpos[7:23] = default_q[isaac_to_mj_obs]
         last_action[:] = 0.0
         mujoco.mj_forward(model, data)  # 手动计算一次，清理reset前的脏数据
-        
+
     reset()     # 执行一次reset
 
     #=============================================
@@ -157,8 +157,7 @@ def main():
             q_rel = q - default_q
 
             # robot-lab训练中轮位置观测为0
-            if cfg.zero_wheel_joint_pos:
-                q_rel[leg_count:] = 0.0
+            q_rel[leg_count:] = 0.0
 
             # 组建observation
             obs = np.concatenate([

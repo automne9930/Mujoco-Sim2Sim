@@ -49,7 +49,6 @@ ang_vel_scale: 0.25
 joint_pos_scale: 1.0
 joint_vel_scale: 0.05
 obs_clip: 100.0
-zero_wheel_joint_pos: true
 
 # ---- 初始化 ----
 init_base_height: 0.45
