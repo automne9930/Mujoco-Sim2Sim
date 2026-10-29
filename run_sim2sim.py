@@ -189,12 +189,19 @@ def main():
             #=============================================
             # 策略分频并ctrl（例如仿真0.02s，分频decimation=5，那么0.1s内5个仿真步用同一次输出action）
             for i in range(decimation):
+                # 读取数据
                 q = data.qpos[7:23][mj_to_isaac]
                 qd = data.qvel[6:22][mj_to_isaac]
+
+                # 计算控制量
                 tau = np.empty(16)
                 tau[:leg_count] = leg_motor.adjust(q[:leg_count], qd[:leg_count], q_des=q_des)
                 tau[leg_count:] = wheel_motor.adjust(q[leg_count:], qd[leg_count:], v_des=v_des)
+
+                # 下发
                 data.ctrl[:] = tau[isaac_to_mj_ctrl]
+
+                # 推动mujoco仿真前进
                 mujoco.mj_step(model, data)
 
             # 把最新状态同步到可视化窗口
